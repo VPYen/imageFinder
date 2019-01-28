@@ -1,3 +1,8 @@
+An excercise in using React with Material-UI.
+This application returns images from PixaBay API based on a search entry. Image results are returned in real-time as queries are entered into input.
+API Key has been removed for security purposes. Refer to https://pixabay.com for individual API keys.
+------------
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
