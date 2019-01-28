@@ -30,3 +30,23 @@
     transform: rotate(360deg);
   }
 }
+
+.searchContainer {
+  margin: auto;
+  display: flex;
+  margin-top: 2%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.searchRow {
+  max-width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.imageResults {
+  display: flex;
+  justify-content: space-between;
+  padding: 50px;
+}
