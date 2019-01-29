@@ -6,7 +6,7 @@ let NavBar = () => {
     <AppBar
       showMenuIconButton={false}
       style={{background: "darkgray"}}
-      title="PixaBay Image Finder"
+      title="PixaBay Media Finder"
     />
   )
 }

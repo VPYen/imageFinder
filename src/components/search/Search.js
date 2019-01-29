@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import ImageResults from '../image-results/ImageResults';
+import API_KEY from '../ApiKey';
+import MediaResults from '../media-results/MediaResults';
 
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -12,15 +13,15 @@ class Search extends Component {
     searchText: "",
     numberResults: 15,
     apiUrl: "https://pixabay.com/api/",
-    apiKey: "",
     totalResults: 0,
-    images: []
+    type: "images",
+    medias: []
   }
 
   onSearchChange = (event) => {
     this.setState({ [event.target.name]: event.target.value}, () => {
       if(this.state.searchText === "") {
-        this.setState({images: []});
+        this.setState({medias: []});
       }else {
         this.getResults();
       }
@@ -28,16 +29,27 @@ class Search extends Component {
   }
 
   onSelectChange = (event, index, value) => {
-    this.setState({numberResults: value});
+    if(value === "images" || value === "videos") {
+      this.setState({type: value});
+    }else {
+      this.setState({numberResults: value});
+    }
     this.getResults();
   }
 
   getResults() {
-    axios.get(`${this.state.apiUrl}?key=${this.state.apiKey}&q=${this.state.searchText}&image_type=photo&per_page=${this.state.numberResults}&safesearch=true`)
+    let url;
+    if (this.state.type === "images") {
+      url = `${this.state.apiUrl}?key=${API_KEY}&q=${this.state.searchText}&per_page=${this.state.numberResults}&safesearch=true`;
+    }else {
+      url = `${this.state.apiUrl}videos/?key=${API_KEY}&q=${this.state.searchText}&per_page=${this.state.numberResults}&safesearch=true`;
+    }
+    console.log(url);
+    axios.get(url)
     .then(response => {
-      this.setState({images: response.data.hits});
+      this.setState({medias: response.data.hits});
       this.setState({totalResults: response.data.totalHits})
-      // console.log(response.data);
+      console.log(response.data);
     })
     .catch(error => {
       console.log(error);
@@ -52,28 +64,40 @@ class Search extends Component {
             name="searchText"
             value={this.state.searchText}
             onChange={this.onSearchChange}
-            floatingLabelText="Search for Images"
+            floatingLabelText="Search for Media"
             fullWidth={true}
             autoFocus={true}
             >
           </TextField>
           <br />
-          <SelectField
-            floatingLabelText="Number of Results"
-            value={this.state.numberResults}
-            onChange={this.onSelectChange}
-            name="numberResults"
+          <div className="selectRow">
+            <SelectField
+              floatingLabelText="Number of Results"
+              value={this.state.numberResults}
+              onChange={this.onSelectChange}
+              name="numberResults"
             >
-            <MenuItem value={5} primaryText="5 Results" />
-            <MenuItem value={15} primaryText="15 Results" />
-            <MenuItem value={25} primaryText="25 Results" />
-            <MenuItem value={50} primaryText="50 Results" />
-            <MenuItem value={100} primaryText="100 Results" />
-          </SelectField>
+              <MenuItem value={5} primaryText="5 Results" />
+              <MenuItem value={15} primaryText="15 Results" />
+              <MenuItem value={25} primaryText="25 Results" />
+              <MenuItem value={50} primaryText="50 Results" />
+              <MenuItem value={100} primaryText="100 Results" />
+            </SelectField>
+            <SelectField
+              floatingLabelText="Media Type"
+              value={this.state.type}
+              onChange={this.onSelectChange}
+              name="type"
+              style={{margin: '10px', width: '150px'}}
+            >
+              <MenuItem value={"images"} primaryText="Images" />
+              <MenuItem value={"videos"} primaryText="Videos" />
+            </SelectField>
+          </div>
           <br />
-          <p>Currently Displaying: {this.state.images.length} |  Total Results: {this.state.totalResults}</p>
+          <p>Currently Displaying: {this.state.medias.length} |  Total Results: {this.state.totalResults}</p>
         </div>
-        <div className="imageResults">{this.state.images.length > 0 ? <ImageResults images={this.state.images} /> : null}</div>
+        <div className="mediaResults">{this.state.medias.length > 0 ? <MediaResults medias={this.state.medias} /> : null}</div>
       </div>
     )
   }
