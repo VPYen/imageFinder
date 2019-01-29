@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import API_KEY from '../ApiKey';
 import ImageResults from '../media-results/ImageResults';
-import VideoResults from '../media-results/ImageResults';
+import VideoResults from '../media-results/VideoResults';
 
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -15,7 +15,7 @@ class Search extends Component {
     numberResults: 15,
     apiUrl: "https://pixabay.com/api/",
     totalResults: 0,
-    type: "images",
+    mediaType: "images",
     medias: []
   }
 
@@ -31,21 +31,19 @@ class Search extends Component {
 
   onSelectChange = (event, index, value) => {
     if(value === "images" || value === "videos") {
-      this.setState({type: value});
+      this.setState({mediaType: value});
     }else {
       this.setState({numberResults: value});
     }
-    this.getResults();
   }
 
   getResults() {
     let url;
-    if (this.state.type === "images") {
+    if (this.state.mediaType === "images") {
       url = `${this.state.apiUrl}?key=${API_KEY}&q=${this.state.searchText}&per_page=${this.state.numberResults}&safesearch=true`;
     }else {
       url = `${this.state.apiUrl}videos/?key=${API_KEY}&q=${this.state.searchText}&per_page=${this.state.numberResults}&safesearch=true`;
     }
-    console.log(url);
     axios.get(url)
     .then(response => {
       this.setState({medias: response.data.hits});
@@ -86,9 +84,9 @@ class Search extends Component {
             </SelectField>
             <SelectField
               floatingLabelText="Media Type"
-              value={this.state.type}
+              value={this.state.mediaType}
               onChange={this.onSelectChange}
-              name="type"
+              name="mediaType"
               style={{margin: '10px', width: '150px'}}
             >
               <MenuItem value={"images"} primaryText="Images" />
@@ -99,8 +97,8 @@ class Search extends Component {
           <p>Currently Displaying: {this.state.medias.length} |  Total Results: {this.state.totalResults}</p>
         </div>
         <div className="mediaResults">
-        {this.state.medias.length > 0 && this.state.type == "images" ? <ImageResults images={this.state.medias} /> : null}
-        {this.state.medias.length > 0 && this.state.type == "videos" ? <VideoResults videos={this.state.medias} /> : null}
+          {this.state.mediaType === "images" && this.state.medias.length > 0 ? <ImageResults images={this.state.medias} /> : null}
+          {this.state.mediaType === "videos" && this.state.medias.length > 0  ? <VideoResults videos={this.state.medias} /> : null}
         </div>
       </div>
     )

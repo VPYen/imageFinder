@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
@@ -8,16 +7,21 @@ import ZoomIn from 'material-ui/svg-icons/action/zoom-in';
 import { GridList, GridTile } from  'material-ui/GridList';
 
 class VideoResults extends Component {
+
   state ={
     dialogOpen: false,
     currentVideo: ""
   }
 
   handleOpen = video => {
-    this.setState({dialogOpen: true, currentVideo: video});
+    this.setState({dialogOpen: true, currentVideoTags: video.tags, currentVideo: video.videos.tiny.url});
   }
   handleClose = video => {
-    this.setState({dialogOpen: false, currentVideo: ""});
+    this.setState({dialogOpen: false, currentVideoTags: "", currentVideo: ""});
+  }
+
+  setImage(pictureId) {
+    return `https://i.vimeocdn.com/video/${pictureId}_640x360.jpg`;
   }
 
   render() {
@@ -42,9 +46,7 @@ class VideoResults extends Component {
                 </IconButton>
               }
             >
-              <video>
-                <source src={video.videos.tiny.url} />
-              </video>
+            <img src={this.setImage(video.picture_id)} alt="img_here" />
             </GridTile>
           ))}
         </GridList>
@@ -59,23 +61,19 @@ class VideoResults extends Component {
       <div>
         {videoListContent}
         <Dialog
-          title={this.state.currentVideo.tags}
+          title={this.state.currentVideoTags}
           actions={actions}
           modal={false}
           open={this.state.dialogOpen}
           onRequestClose={this.handleClose}
         >
-          <video>
-            <source src={this.state.currentVideo.videos.tiny.url} />
-          </video>
+          <div className="videoWrapper">
+            <video src={this.state.currentVideo} controls></video>
+          </div>
         </Dialog>
       </div>
     )
   }
-}
-
-VideoResults.propTypes = {
-  videos: PropTypes.array.isRequired
 }
 
 export default VideoResults;
