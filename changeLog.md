@@ -1,3 +1,7 @@
 27JAN2019
 ----------
 * Initial commit
+
+28JAN2019
+----------
+* Modified structure of application to allow video selection instead of only images.
