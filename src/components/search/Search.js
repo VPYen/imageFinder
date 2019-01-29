@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import API_KEY from '../ApiKey';
-import MediaResults from '../media-results/MediaResults';
+import ImageResults from '../media-results/ImageResults';
+import VideoResults from '../media-results/ImageResults';
 
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
@@ -97,7 +98,10 @@ class Search extends Component {
           <br />
           <p>Currently Displaying: {this.state.medias.length} |  Total Results: {this.state.totalResults}</p>
         </div>
-        <div className="mediaResults">{this.state.medias.length > 0 ? <MediaResults medias={this.state.medias} /> : null}</div>
+        <div className="mediaResults">
+        {this.state.medias.length > 0 && this.state.type == "images" ? <ImageResults images={this.state.medias} /> : null}
+        {this.state.medias.length > 0 && this.state.type == "videos" ? <VideoResults videos={this.state.medias} /> : null}
+        </div>
       </div>
     )
   }
