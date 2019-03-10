@@ -1,6 +1,6 @@
 ## An excercise in using React with Material-UI.
 This application returns media(images/videos) from PixaBay API based on a search entry. Media results are returned in real-time as queries are entered into input.
-API Key has been removed for security purposes. Refer to https://pixabay.com for personal API keys.
+*Note: API Key has been removed. Refer to https://pixabay.com for personal API keys.
 
 ------------
 
